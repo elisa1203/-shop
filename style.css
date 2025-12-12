@@ -103,22 +103,31 @@ body {
   margin-bottom: 10px;
 }
 
-
-.add-cart:hover {
-  background: #cc0066;
+.buy-btn {
+  display: inline-block;
+  background: #ff66cc;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 
-.add-cart {
-  background: #ff66b2;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+.buy-btn:focus {
+  outline: none;
+  box-shadow: 0 0 15px #ffccff, 0 0 30px #ff66cc;
+}
+
+.buy-btn:hover {
+  box-shadow: 0 0 15px #ffccff, 0 0 30px #ff66cc;
 }
 
 .cart {
-  background: #ffffffcc; /* 半透明の白でふんわり */
+ background: #ffffffcc; /* 半透明の白でふんわり */
   border: 2px solid #ff99cc;
   border-radius: 15px;
   padding: 20px;
@@ -127,6 +136,13 @@ body {
   box-shadow: 0 0 15px #ffccf5;
   backdrop-filter: blur(5px); /* 透明感のあるガラス風 */
 }
+
+.product-card {
+  background: transparent; /* ← 白く見えるならこれで消す */
+  padding: 10px;
+  border: none;
+}
+
 
 .cart h2 {
   color: #ffff66;
@@ -186,3 +202,9 @@ body {
     opacity: 0;
   }
 }
+
+.product-card {
+  background: transparent; /* ← これで白い四角が消える */
+}
+
+
