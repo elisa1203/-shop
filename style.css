@@ -224,3 +224,7 @@ body {
   font-weight: bold;
 }
 
+.mobile-view .clothes-container {
+  grid-template-columns: repeat(2, 1fr);
+}
+
