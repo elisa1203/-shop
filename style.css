@@ -228,3 +228,10 @@ body {
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* スマホ幅のときだけ2列にする */
+@media (max-width: 600px) {
+  .clothes-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
