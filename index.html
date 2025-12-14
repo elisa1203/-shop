@@ -23,7 +23,7 @@
   </script>
 
 
-
+ <div class="top-section">
   <!-- 商品一覧 -->
   <div class="clothes-container">
 
@@ -31,7 +31,7 @@
       <img src="green-jacket.jpg" alt="olivegreen jacket" >
       <h3 class="item-name">olivegreen jacket</h3>
       <p class="item-price">¥4500</p>
-
+       
       <a href="https://jp.mercari.com/item/m76952233578"
          target="_blank"
          class="buy-btn">
@@ -61,31 +61,255 @@
          class="buy-btn">
         メルカリで購入する
       </a>
+    
+    </div>
+    
+    </div>
+    
+    
+    <div class="canvas-section">
+    
+ <h2>コーデを作る</h2>
+
+<div class="coordinate-wrapper">
+
+  <!-- キャンバス -->
+  <div id="coordinate-area"></div>
+  
+  <!-- ジャンル選択 -->
+  <div class="item-panel">
+
+    <div class="genre-buttons">
+      <button data-genre="tops">トップス</button>
+      <button data-genre="bottoms">ボトムス</button>
+      <button data-genre="bags">バッグ</button>
+    </div>
+
+    <!-- 商品リスト -->
+    <div class="item-list">
+
+      <div class="genre-items" id="tops">
+        <img src="adidas-pink-jacket.jpg" data-slot="top">
+        <img src="green-jacket.jpg" data-slot="top">
+      </div>
+
+      <div class="genre-items" id="bottoms" style="display:none;">
+        <img src="ribbon-flare.jpg" data-slot="bottom">
+      </div>
+
+      <div class="genre-items" id="bags" style="display:none;">
+        <img src="camo-bag.jpg" data-slot="bag">
+      </div>
+
     </div>
 
   </div>
   
-    
-
-  <!-- カート表示欄 -->
-  <div id="cart" class="cart">
-    <h2>　  🛒 💨。.:*・°☆.</h2>
-    <ul id="cart-items"></ul>
-    <p id="cart-total"></p>
   </div>
 
-  
-
-  <!-- 外部JS（正しい位置に移動済み） -->
-  <script src="cart.js"></script>
-
+<div class="button-group">
+   <button id="save-btn">保存</button>
+   <button id="delete-btn">消去</button>
+   </div>
+   
 <script>
-  document.getElementById("switch-to-mobile").addEventListener("click", function() {
-    document.body.classList.toggle("mobile-view");
+/* --- ジャンル切り替え --- */
+document.querySelectorAll(".genre-buttons button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const genre = btn.dataset.genre;
+
+    document.querySelectorAll(".genre-items").forEach(g => g.style.display = "none");
+    document.getElementById(genre).style.display = "block";
   });
+});
+
+/* --- 商品クリックでキャンバスに配置 --- */
+document.querySelectorAll(".genre-items img").forEach(img => {
+  img.addEventListener("click", () => {
+    const slot = img.dataset.slot;
+    placeItemInSlot(img.src, slot);
+  });
+});
+
+/* --- キャンバスにアイテムを配置（完成版） --- */
+function placeItemInSlot(src, slot) {
+  const area = document.getElementById("coordinate-area");
+
+  // ✅ wrapper（画像＋削除＋リサイズ）
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("placed-wrapper");
+  wrapper.style.position = "absolute";
+  wrapper.style.zIndex = "2000";
+
+  // ✅ 画像
+  const img = document.createElement("img");
+  img.src = src;
+  img.classList.add("placed-item");
+  img.style.position = "absolute";
+  img.style.zIndex = "2001";
+  img.style.width = slot === "bag" ? "150px" : "250px";
+
+  // ✅ 削除ボタン（左上）
+  const del = document.createElement("button");
+  del.classList.add("delete-btn");
+  del.textContent = "×";
+  del.style.zIndex = "2002";
+  del.addEventListener("click", () => wrapper.remove());
+
+  // ✅ リサイズハンドル（右下）
+  const handle = document.createElement("div");
+  handle.classList.add("resize-handle");
+  handle.style.zIndex = "2002";
+   handle.textContent = "↖️";   // ← これを追加！
+
+  // ✅ wrapper に追加
+  wrapper.appendChild(img);
+  wrapper.appendChild(del);
+  wrapper.appendChild(handle);
+  area.appendChild(wrapper);
+
+  // ✅ 初期位置
+  const positions = {
+    top:   { left: "50%", top: "10%" },
+    bottom:{ left: "50%", top: "60%" },
+    bag:   { left: "80%", top: "40%" }
+  };
+
+  const pos = positions[slot];
+  wrapper.style.left = pos.left;
+  wrapper.style.top = pos.top;
+  wrapper.style.transform = "translate(-50%, -50%)";
+
+  // ✅ 機能を適用
+  enableDrag(wrapper);
+  enableResize(wrapper, img, handle);
+}
+
+/* --- ドラッグ機能（完成版） --- */
+function enableDrag(wrapper) {
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  wrapper.addEventListener("mousedown", startDrag);
+  wrapper.addEventListener("touchstart", startDrag);
+
+  function startDrag(e) {
+    e.preventDefault();
+    isDragging = true;
+
+    const rect = wrapper.getBoundingClientRect();
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+    offsetX = x - rect.left;
+    offsetY = y - rect.top;
+
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", endDrag);
+    document.addEventListener("touchmove", move);
+    document.addEventListener("touchend", endDrag);
+  }
+
+  function move(e) {
+    if (!isDragging) return;
+
+    const area = document.getElementById("coordinate-area");
+    const rect = area.getBoundingClientRect();
+
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+    wrapper.style.left = (x - rect.left - offsetX) + "px";
+    wrapper.style.top = (y - rect.top - offsetY) + "px";
+    wrapper.style.transform = "none";
+  }
+
+  function endDrag() {
+    isDragging = false;
+    document.removeEventListener("mousemove", move);
+    document.removeEventListener("mouseup", endDrag);
+    document.removeEventListener("touchmove", move);
+    document.removeEventListener("touchend", endDrag);
+  }
+}
+
+/* --- リサイズ機能（完成版） --- */
+function enableResize(wrapper, img, handle) {
+  let startX, startY, startSize;
+
+  handle.addEventListener("mousedown", startResize);
+  handle.addEventListener("touchstart", startResize);
+
+  function startResize(e) {
+    e.preventDefault();
+
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // ✅ 基準サイズ（幅を基準にする）
+    startSize = img.offsetWidth;
+
+    document.addEventListener("mousemove", resize);
+    document.addEventListener("mouseup", stopResize);
+    document.addEventListener("touchmove", resize);
+    document.addEventListener("touchend", stopResize);
+  }
+
+  function resize(e) {
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // ✅ ハンドルの移動距離（斜め方向も含む）
+    const diffX = x - startX;
+    const diffY = y - startY;
+
+    // ✅ 斜め方向の距離を合成（ピタゴラス）
+    const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+
+    // ✅ 上方向に動かしたら大きく、下方向なら小さく
+    const direction = diffY < 0 ? 1 : -1;
+
+    // ✅ 新しいサイズ
+    const newSize = startSize + distance * direction;
+
+    // ✅ 最小サイズの制限
+    if (newSize > 30) {
+      img.style.width = newSize + "px";
+      img.style.height = "auto"; // 比率維持
+    }
+  }
+
+  function stopResize() {
+    document.removeEventListener("mousemove", resize);
+    document.removeEventListener("mouseup", stopResize);
+    document.removeEventListener("touchmove", resize);
+    document.removeEventListener("touchend", stopResize);
+  }
+}
+
+
 </script>
 
 
-</body>
-</html>
+<!-- ✅ 保存機能 -->
+<script>
+document.getElementById("save-btn").addEventListener("click", () => {
+  const area = document.getElementById("coordinate-area");
 
+  html2canvas(area).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "coordinate.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+});
+</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</body>
+
+</html>

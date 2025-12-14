@@ -67,21 +67,24 @@ color: #ffffff;
     .clothes-container { 
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
-    gap: 20px; padding: 20px; } 
+    gap: 20px; 
+    padding: 20px; } 
     
-    .clothes-item { 
-    background: transparent; 
-    padding: 15px; 
-    text-align: center; 
-    border: none; 
-    border-radius: 8px; 
-    box-sizing: border-box; 
-    } 
+   .clothes-item {
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transform: none;
+}
     
     .item-photo { 
     width: 100%; 
     height: auto; 
-    border-radius: 5px; 
+    display:block
     }
     
      .item-name { 
@@ -256,7 +259,8 @@ color: #ffffff;
                   width: 100%; 
                   height: auto; 
                   }
-                   }
+                  
+              
                    
                    /* スマホで「スマホ版」に切り替えたとき、中央にぴったり合わせる */
 @media (max-width: 600px) {
@@ -268,4 +272,119 @@ color: #ffffff;
     border: 5px solid #ff66cc;
     box-sizing: border-box;
   }
+}
+
+.coordinate-wrapper {
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+}
+
+#coordinate-area {
+  width: 100vw;   /* 画面の80%の幅 */
+  height: 100vw;  /* 幅と同じにする＝正方形 */
+  max-width: 700px;
+  max-height: 700px;
+  border: 2px dashed #ff66cc;
+  border-radius: 15px;
+  position: relative;
+  margin: 20px auto;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+
+.item-panel {
+  width: 30%;
+  z-index:1;
+}
+
+.genre-buttons button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ff66cc;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.genre-items img {
+  width: 100%;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.top-section {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.canvas-section {
+  width: 50vw;
+  height:150vw
+  display: flex;
+  justify-content: center;
+}
+
+#save-btn {
+display: inline-block; 
+       background: #ff66cc; 
+       color: white; 
+       padding: 12px 24px; 
+       border-radius: 999px; 
+       text-decoration: none; 
+       font-weight: bold; 
+       transition: 0.2s; 
+       border: none; 
+       box-shadow: none; 
+       outline: none; 
+       }
+       
+       #save-btn:hover {
+  box-shadow: 0 0 15px #ffccff, 0 0 25px #ff66cc;
+}
+
+.placed-wrapper {
+  position: absolute;
+  z-index: 2000;
+}
+
+.placed-item {
+  position: absolute;
+  z-index: 2001;
+}
+
+.delete-btn {
+  position: absolute;
+  top: -10px;
+  left: -40px;
+  background: #ff3366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 8px #ff99bb;
+  z-index: 2002;
+}
+
+.resize-handle {
+  width: 18px;
+  height: 18px;
+  background: #ff66cc;
+  border-radius: 50%;
+  position: absolute;
+  right: -10px;
+  bottom: -9px;
+  cursor: se-resize;
+  box-shadow: 0 0 8px #ff99dd;
+  z-index: 2002;
+  display: flex;          /* ← 追加 */
+  align-items: center;    /* ← 追加 */
+  justify-content: center;/* ← 追加 */
+  font-size: 12px;        /* ← 追加（↖️の大きさ調整） */
 }
