@@ -1,8 +1,12 @@
   <!-- coordinate.html -->
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コーデを作る</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     
  <h2>コーデを作る</h2>
@@ -19,22 +23,27 @@
       <button data-genre="tops">トップス</button>
       <button data-genre="bottoms">ボトムス</button>
       <button data-genre="bags">バッグ</button>
+    <button data-genre="accessories">アクセサリー</button>
     </div>
 
     <!-- 商品リスト -->
     <div class="item-list">
 
       <div class="genre-items" id="tops">
-        <img src="adidas-pink-jacket.jpg" data-slot="top">
-        <img src="green-jacket.jpg" data-slot="top">
+        <img src="adidas-pink-jacket.png" data-slot="top">
+        <img src="green-jacket.png" data-slot="top">
       </div>
 
       <div class="genre-items" id="bottoms" style="display:none;">
-        <img src="ribbon-flare.jpg" data-slot="bottom">
+        <img src="ribbon-flare.png" data-slot="bottom">
       </div>
 
       <div class="genre-items" id="bags" style="display:none;">
-        <img src="camo-bag.jpg" data-slot="bag">
+        <img src="camo-bag.png" data-slot="bag">
+      </div>
+      
+　　<div class="genre-items" id="accessories" style="display:none;">
+        <img src="necklace-removebg-preview.png" data-slot="accessories">
       </div>
 
     </div>
@@ -43,9 +52,23 @@
   
   </div>
 
-<div class="button-group">
+<div>
    <button id="save-btn">保存</button>
-   <button id="delete-btn">消去</button>
+   </div>
+
+<div class="bg-colors">
+  <button data-color="#ff0000">❤️</button>
+  <button data-color="#ff66b2">🩷</button>
+  <button data-color="#ff9900">🧡</button>
+  <button data-color="#ffeb3b">💛</button>
+  <button data-color="#4caf50">💚</button>
+  <button data-color="#66ccff">🩵</button>
+  <button data-color="#2196f3">💙</button>
+  <button data-color="#9c27b0">💜</button>
+  <button data-color="#000000">🖤</button>
+  <button data-color="#ffffff">🤍</button>
+</div>
+
    </div>
    
 <script>
@@ -108,7 +131,8 @@ function placeItemInSlot(src, slot) {
   const positions = {
     top:   { left: "50%", top: "10%" },
     bottom:{ left: "50%", top: "60%" },
-    bag:   { left: "80%", top: "40%" }
+    bag:   { left: "80%", top: "40%" },
+    accessories: {left: "60%", top: "40%" }
   };
 
   const pos = positions[slot];
@@ -224,27 +248,49 @@ function enableResize(wrapper, img, handle) {
   }
 }
 
+document.querySelectorAll(".bg-colors button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const color = btn.getAttribute("data-color");
+    document.getElementById("coordinate-area").style.background = color;
+  });
+});
+
 
 </script>
 
 
 <!-- ✅ 保存機能 -->
-<script>
-document.getElementById("save-btn").addEventListener("click", () => {
-  const area = document.getElementById("coordinate-area");
+<script src="html2canvas"></script>
 
-  html2canvas(area).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "coordinate.png";
-    link.href = canvas.toDataURL();
-    link.click();
+<script>
+function hideControls() {
+  document.querySelectorAll(".delete-btn, .resize-handle").forEach(el => {
+    el.style.display = "none";
   });
-});
+}
+
+function showControls() {
+  document.querySelectorAll(".delete-btn, .resize-handle").forEach(el => {
+    el.style.display = "block";
+  });
+}
+
+function saveCoordinate() {
+  hideControls();
+
+  html2canvas(document.getElementById("coordinate-area")).then(canvas => {
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL();
+    link.download = "coordinate.png";
+    link.click();
+
+    showControls();
+  });
+}
+
+document.getElementById("save-btn").addEventListener("click", saveCoordinate);
 </script>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 
 </body>
