@@ -330,7 +330,8 @@ color: #ffffff;
 }
 .genre-buttons button {
   width: 100%;
-  padding: 10px;
+   height: 30px; 
+  line-height: 30px; 
   margin-bottom: 10px;
   background: #ff66cc;
   color: white;
