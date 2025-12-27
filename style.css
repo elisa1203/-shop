@@ -185,8 +185,8 @@ color: #ffffff;
   padding: 20px;
 }
 
-.new-arrivals
-display: grid; 
+.new-arrivals {
+    display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
     padding: 20px; } 
