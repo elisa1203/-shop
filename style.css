@@ -192,7 +192,7 @@ color: #ffffff;
     padding: 20px; } 
     
    @media (max-width: 600px) {
-  .new-arrivals {
+ .mobile-view .new-arrivals {
     grid-template-columns: repeat(2, 1fr);
   }
 }
